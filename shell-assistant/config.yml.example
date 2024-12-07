@@ -1,0 +1,22 @@
+# LLM Provider Configuration
+# Choose one of: 'openai', 'anthropic', or 'mistral'
+llm_provider: "mistral"
+
+# OpenAI Configuration (not used when llm_provider is "mistral")
+openai:
+  api_key: ""
+  model: "gpt-3.5-turbo"
+
+# Anthropic Configuration (not used when llm_provider is "mistral")
+anthropic:
+  api_key: ""
+  model: "claude-2"
+
+# Mistral Configuration
+mistral:
+  api_key: "your-mistral-api-key-here"  # Get your API key from https://console.mistral.ai
+  model: "mistral-medium"  # Available models: mistral-tiny, mistral-small, mistral-medium
+
+# General Settings
+max_tokens: 100
+temperature: 0.7
