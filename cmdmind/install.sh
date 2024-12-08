@@ -2,7 +2,7 @@
 
 # Create the script in /usr/local/bin
 echo '#!/bin/bash
-python3 /Users/joseph/Dev/Windsfurf/shell-assistant/shell_assistant.py "$@"' | sudo tee /usr/local/bin/ask > /dev/null
+python3 /Users/joseph/Dev/Windsfurf/cmdmind/shell_assistant.py "$@"' | sudo tee /usr/local/bin/ask > /dev/null
 
 # Make it executable
 sudo chmod +x /usr/local/bin/ask
