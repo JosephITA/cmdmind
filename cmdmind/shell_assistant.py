@@ -37,6 +37,10 @@ def load_config():
     with open(CONFIG_FILE, 'r') as f:
         return yaml.safe_load(f)
 
+def jls_extract_def(jls_extract_var):
+    return jls_extract_var
+
+
 def get_command_from_llm(prompt: str, config: dict) -> str:
     provider = config.get('llm_provider', 'openai')
     system_info = get_system_info()
@@ -103,21 +107,41 @@ REMEMBER: Return EXACTLY ONE command, nothing else."""
         )
         return response.content[0].text.strip()
     
+    # elif provider == 'mistral':
+    #     client = MistralClient(api_key=config['mistral']['api_key'])
+    #     messages = [
+    #         {"role": "system", "content": system_prompt},
+    #         {"role": "user", "content": prompt}
+    #     ]
+    #     chat_response = client.chat(
+    #         model=config['mistral']['model'],
+    #         messages=messages
+    #     )
+    #     return chat_response.choices[0].message.content.strip()
+    
+    # else:
+    #     raise ValueError(f"Unsupported LLM provider: {provider}")
     elif provider == 'mistral':
-        client = MistralClient(api_key=config['mistral']['api_key'])
+        from mistralai import Mistral  # Import the correct Mistral client class
+        client = Mistral(api_key=config['mistral']['api_key'])  # Initialize the client with the API key
+    
+        # Prepare the messages
+        jls_extract_var = prompt
         messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": jls_extract_def(jls_extract_var)}
         ]
-        chat_response = client.chat(
-            model=config['mistral']['model'],
-            messages=messages
-        )
-        return chat_response.choices[0].message.content.strip()
     
-    else:
-        raise ValueError(f"Unsupported LLM provider: {provider}")
-
+        # Send the chat request using the new method
+        response = client.chat.complete(
+            model=config['mistral']['model'],
+            messages=messages,
+            max_tokens=config.get('max_tokens', 100),
+            temperature=config.get('temperature', 0.7)
+    )
+    
+    # Return the response content
+    return response.choices[0].message.content.strip()
 @click.command()
 @click.argument('prompt', type=str)
 @click.option('-e', '--execute', is_flag=True, help='Execute the generated command after confirmation')
