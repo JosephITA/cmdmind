@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Define the path to shell_assistant.py
-SCRIPT_PATH="/Users/joseph/Dev/Windsfurf/cmdmind/shell_assistant.py"
+# Get the directory of the script
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+SCRIPT_PATH="$SCRIPT_DIR/shell_assistant.py"
 
 # Check if the script exists
 if [ ! -f "$SCRIPT_PATH" ]; then
